@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alvo de Ataque</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #00ff9c;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 3em;
+            text-shadow: 0 0 10px #00ff9c;
+        }
+        .glow {
+            animation: glow 0.1s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ff9c; }
+            to { text-shadow: 0 0 20px #00ff9c, 0 0 30px #00ff9c; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="glow">Tente me derrubar!</h1>
+</body>
+</html>
