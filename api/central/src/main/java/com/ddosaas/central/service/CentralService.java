@@ -49,14 +49,13 @@ public class CentralService {
         List<WorkerResponseDTO> workerResponseList = new CopyOnWriteArrayList<>();
         workerList.forEach(worker -> {
             try{
-                runDTO.setInternalToken(worker.getInternalToken());
                 this.workerService.run(worker, runDTO, workerResponseList);
             }
             catch(Exception e){
+                workerResponseList.add(new WorkerResponseDTO());
                 e.printStackTrace();
             }
             finally{
-                workerResponseList.add(new WorkerResponseDTO());
             }
         });
 

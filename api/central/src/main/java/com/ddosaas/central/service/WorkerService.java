@@ -21,16 +21,20 @@ import lombok.extern.slf4j.Slf4j;
 public class WorkerService {
 
     @Async
-    public void run(Worker worker, RunCentralDTO runDTO, List<WorkerResponseDTO> workerResponseList) {
+    public void run(Worker worker, RunCentralDTO runCentralDTO, List<WorkerResponseDTO> workerResponseList) {
 
-        log.info("Iniciando ataque em {} utilizando o worker {}", runDTO, worker.getUrl());
+        String internalToken = worker.getInternalToken();
+        RunCentralDTO runWorker = runCentralDTO.clone();
+        runWorker.setInternalToken(internalToken);
+
+        log.info("Iniciando ataque em {} utilizando o worker {} com token {}", runWorker.getUrl(), worker.getUrl(), runWorker.getInternalToken());
 
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<Object> requestEntity = new HttpEntity<>(runDTO, headers);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(runWorker, headers);
         String url = worker.getUrl() + "/" + "/api/ddosaas/run";
         new RestTemplate().postForObject(url, requestEntity, String.class);
         
-        log.info("Finalizado ataque em {} utilizando o worker {}", runDTO, worker.getUrl());
+        log.info("Finalizado ataque em {} utilizando o worker {}", runWorker, worker.getUrl());
     }
     
 }

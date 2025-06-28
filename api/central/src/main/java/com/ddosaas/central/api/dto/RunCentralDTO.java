@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RunCentralDTO {
+public class RunCentralDTO implements Cloneable {
     
     @NotNull(message = "Please provide the URL.")
     private String url;
@@ -28,5 +28,15 @@ public class RunCentralDTO {
     @NotNull(message = "Please provide the number of IPs.")
     @Min(value = 1, message = "The number of IPs must be greater than or equal to 1.")
     private int numberOfIps;
+
+    @Override
+    public RunCentralDTO clone() {
+        try {
+            return (RunCentralDTO) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }    
+    
     
 }
