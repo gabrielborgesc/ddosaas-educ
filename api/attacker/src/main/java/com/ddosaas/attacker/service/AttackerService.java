@@ -75,7 +75,7 @@ public class AttackerService {
 
     private void checkInternalToken(RunAttackerDTO runDTO) {
         if(!INTERNAL_TOKEN.equals(runDTO.getInternalToken())){
-            throw new RuntimeException("Token interno de comunicação inválido.");
+            throw new RuntimeException("Token interno de comunicação inválido: " + runDTO.getInternalToken());
         }
     }
 
