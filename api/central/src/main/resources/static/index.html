@@ -71,6 +71,7 @@
       color: #cccccc;
       font-size: 0.9rem;
       white-space: pre-wrap;
+      min-height: 50px;
     }
   </style>
 </head>
@@ -110,30 +111,31 @@
         numberOfIps: parseInt(form.ips.value),
       };
 
-        try {
+      responseBox.textContent = 'Loading...';
+
+      try {
         const response = await fetch('/api/ddosaas/run', {
-            method: 'POST',
-            headers: {
+          method: 'POST',
+          headers: {
             'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+          },
+          body: JSON.stringify(payload)
         });
 
         const contentType = response.headers.get('content-type');
 
         let data;
         if (contentType && contentType.includes('application/json')) {
-            data = await response.json();
-            responseBox.textContent = JSON.stringify(data, null, 2);
+          data = await response.json();
+          responseBox.textContent = JSON.stringify(data, null, 2);
         } else {
-            data = await response.text();
-            responseBox.textContent = data;
+          data = await response.text();
+          responseBox.textContent = data;
         }
 
-        } catch (error) {
+      } catch (error) {
         responseBox.textContent = 'Error: ' + error.message;
-        }
-
+      }
     });
   </script>
 </body>
