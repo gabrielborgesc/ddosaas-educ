@@ -33,5 +33,13 @@
 
     </changeSet>
 
+    <changeSet author="gabriel (generated)" id="0001-internal-token">
+        <addColumn tableName="worker">
+            <column name="internal_token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ddosaas.central.api.dto.RunCentralDTO;
@@ -33,33 +36,38 @@ public class CentralService {
 
         boolean existsByToken = this.tokenRepository.existsByToken(runDTO.getToken());
         if(!existsByToken){
-            throw new RuntimeException("Token inválido.");
+            throw new RuntimeException("Invalid Token.");
         }
 
-        List<Worker> workerList = this.workerRepository.findAllByMaxThreadsGreaterThanEqualOrderByIdDesc(runDTO.getNumberOfThreads());
+        Pageable pageable = PageRequest.of(0, runDTO.getNumberOfIps(), Sort.by("id").descending());
+        List<Worker> workerList = this.workerRepository.findAllByMaxThreadsGreaterThanEqualOrderByIdDesc(runDTO.getNumberOfThreads(), pageable);
 
-        if(workerList.isEmpty()){
-            throw new RuntimeException("Não foram encontrados servidores com os parâmetros requisitados.");
+        if(workerList.isEmpty() || workerList.size() < runDTO.getNumberOfIps()){
+            throw new RuntimeException("No servers were found with the requested configurations.");
         }
 
         List<WorkerResponseDTO> workerResponseList = new CopyOnWriteArrayList<>();
-        workerList.forEach(worker -> this.workerService.run(worker, runDTO, workerResponseList));
+        workerList.forEach(worker -> {
+            try{
+                runDTO.setInternalToken(worker.getInternalToken());
+                this.workerService.run(worker, runDTO, workerResponseList);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            finally{
+                workerResponseList.add(new WorkerResponseDTO());
+            }
+        });
 
-        // long initialTime = System.currentTimeMillis();
         while(true) {
             
-            // long currentTime = System.currentTimeMillis();
-            // if( (currentTime - initialTime) > ConstantesUtil.timeoutWorkerCallInMiliseconds){
-            //     //timeout de 60s.
-            //     throw new RuntimeException("Ocorreu um erro ao gerar $nomeRecurso. <br/> Por favor, tente novamente.".replace("$nomeRecurso", nomeRecurso));
-            // }
-
             Thread.sleep(100);
             if(workerResponseList.size() == workerList.size()){
                 break;
             }
 
-        }        
+        }
 
     }
 

@@ -13,16 +13,20 @@ import lombok.Setter;
 @Setter
 public class RunCentralDTO {
     
-    @NotNull(message = "Informe a url.")
+    @NotNull(message = "Please provide the URL.")
     private String url;
-    
-    @NotNull(message = "Informe o token.")
+
+    @NotNull(message = "Please provide the token.")
     private String token;
 
-    private String internalToken = "$YHJNjfdg1532";
-    
-    @NotNull(message = "Informe a quantidade de threads.")
-    @Min(value = 1, message = "O número de threads deve ser maior ou igual a 1.")
+    private String internalToken;
+
+    @NotNull(message = "Please provide the number of threads.")
+    @Min(value = 1, message = "The number of threads must be greater than or equal to 1.")
     private Long numberOfThreads;
+
+    @NotNull(message = "Please provide the number of IPs.")
+    @Min(value = 1, message = "The number of IPs must be greater than or equal to 1.")
+    private int numberOfIps;
     
 }

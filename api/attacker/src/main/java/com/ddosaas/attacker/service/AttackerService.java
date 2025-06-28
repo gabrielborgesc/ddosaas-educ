@@ -8,8 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.management.RuntimeErrorException;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ddosaas.attacker.api.dto.RunAttackerDTO;
@@ -20,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AttackerService {
 
-    private static final String INTERNAL_TOKEN = "$YHJNjfdg1532";
+    @Value("${internalToken}")
+    private String INTERNAL_TOKEN;
 
     public void run(RunAttackerDTO runDTO) {
 
@@ -29,7 +29,7 @@ public class AttackerService {
         ExecutorService executor = Executors.newFixedThreadPool(runDTO.getNumberOfThreads().intValue());
         List<Future<?>> futures = new ArrayList<>();
 
-        System.out.println("Iniciando ataque DDoS simulado com " + runDTO.getNumberOfThreads() + " threads...");
+        System.out.println("Starting simulated DDoS attack with " + runDTO.getNumberOfThreads() + " threads...");
 
         Runnable task = () -> {
             while (true) {

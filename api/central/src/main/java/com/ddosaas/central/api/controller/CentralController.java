@@ -27,7 +27,7 @@ public class CentralController {
 
 		if (result.hasErrors()) {
 			// Se houver erros de validação, pegue a mensagem de erro exata
-			StringBuilder errorMessages = new StringBuilder("Erros de validação: ");
+			StringBuilder errorMessages = new StringBuilder("Validation Erros: ");
 			result.getAllErrors().forEach(error -> errorMessages.append(error.getDefaultMessage()).append(" "));
 
 			return ResponseEntity.badRequest().body(errorMessages.toString());

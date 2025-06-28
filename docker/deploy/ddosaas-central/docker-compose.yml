@@ -1,0 +1,102 @@
+version: '3'
+
+services:
+  postgres-ddosaas:
+    container_name: "postgres-ddosaas"
+    image: postgres:13-alpine3.20
+    environment:
+      - POSTGRES_DB=ddosaas
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password_to_be_replaced
+      - TZ=America/Sao_Paulo
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+
+  central:
+    image: gabrielborgesdocker/ppee:central-1.0.0
+    container_name: ddosaas-central
+    # ports:
+    #   - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-ddosaas:5432/ddosaas
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password_to_be_replaced
+    restart: unless-stopped
+    labels:
+    - "traefik.enable=true"
+    - "traefik.docker.network=traefik"
+
+    - "traefik.http.routers.central.entrypoints=websecure"
+    - "traefik.http.routers.central.tls=true"
+    - "traefik.http.routers.central.tls.certresolver=le"
+    - "traefik.http.routers.central.rule=Host(`cti-central.ppee-unb.com.br`)"
+    - "traefik.http.services.central.loadbalancer.server.port=8080"
+    - "traefik.http.routers.central.service=central"
+    networks:
+    - traefik
+
+  attacker:
+    image: gabrielborgesdocker/ppee:attacker-1.0.0
+    container_name: ddosaas-attacker
+    # ports:
+    #   - "8080:8080"
+    environment:
+      internalToken: token_to_be_replaced
+    restart: unless-stopped
+    networks:
+    - traefik
+
+  traefik:
+    image: traefik:v2.9.5
+    container_name: traefik
+    hostname: traefik
+    command:
+    # - --log.level=DEBUG
+    - --entrypoints.web.address=:80
+    - --entrypoints.websecure.address=:443
+    - --entrypoints.web.http.redirections.entryPoint.to=websecure
+    - --entrypoints.web.http.redirections.entryPoint.scheme=https
+    - --entrypoints.web.http.redirections.entrypoint.permanent=true
+    - --certificatesresolvers.le.acme.email=ddosaas.ppee.unb@gmail.com
+    - --certificatesresolvers.le.acme.storage=acme.json
+    - --certificatesresolvers.le.acme.tlschallenge=true
+    - --providers.docker=true
+    - --providers.docker.exposedByDefault=false
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "/data/letsencrypt/acme.json:/acme.json"
+    environment:
+    - TZ=America/Sao_Paulo
+    restart: unless-stopped
+    networks:
+    - traefik      
+
+  portainer:
+    image: portainer/portainer-ce:2.20.3
+    container_name: portainer
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.tls.certresolver=le"
+      - "traefik.http.routers.portainer.rule=Host(`portainer-central.ppee-unb.com.br`)"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.service=portainer"
+    networks:
+      - traefik
+
+volumes:
+  portainer_data:
+
+networks:
+  traefik:
+    external: true  

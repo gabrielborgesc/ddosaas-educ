@@ -30,13 +30,6 @@ public class WorkerService {
         String url = worker.getUrl() + "/" + "/api/ddosaas/run";
         new RestTemplate().postForObject(url, requestEntity, String.class);
         
-        try {
-            Thread.sleep(3000);
-            workerResponseList.add(new WorkerResponseDTO());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         log.info("Finalizado ataque em {} utilizando o worker {}", runDTO, worker.getUrl());
     }
     

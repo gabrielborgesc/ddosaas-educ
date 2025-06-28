@@ -21,7 +21,9 @@ public class Worker {
     private Long id;
 
     private String url;
-
+    
     private Long maxThreads;
+
+    private String internalToken;
     
 }
