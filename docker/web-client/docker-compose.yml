@@ -45,15 +45,15 @@ services:
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock:ro"
     - "/data/letsencrypt/acme.json:/acme.json"
+    deploy:
+      resources:
+        limits:
+          memory: 20m    
     environment:
     - TZ=America/Sao_Paulo
     restart: unless-stopped
     networks:
       - traefik
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 6m    
 
 networks:
   traefik:
