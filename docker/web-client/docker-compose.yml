@@ -50,10 +50,10 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-    deploy:
-      resources:
-        limits:
-          memory: 6m    
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 6m    
 
 networks:
   traefik:
