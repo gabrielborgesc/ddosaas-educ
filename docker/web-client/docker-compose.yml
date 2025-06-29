@@ -48,7 +48,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20m    
+          memory: 50m    
     environment:
     - TZ=America/Sao_Paulo
     # restart: unless-stopped
