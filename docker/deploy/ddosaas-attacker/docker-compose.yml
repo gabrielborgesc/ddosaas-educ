@@ -6,7 +6,7 @@ services:
     # ports:
     #   - "8080:8080"
     environment:
-      internalToken: token_to_be_replaced
+      internalToken: ${INTERNAL_TOKEN}
     restart: unless-stopped
     labels:
     - "traefik.enable=true"
@@ -61,7 +61,7 @@ services:
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.tls.certresolver=le"
-      - "traefik.http.routers.portainer.rule=Host(`portainer-worker.ppee-unb.com.br`)"
+      - "traefik.http.routers.portainer.rule=Host(`${DOMAIN_PORTAINER_ATTACKER}`)"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer.service=portainer"
     networks:
