@@ -49,8 +49,12 @@ services:
     - TZ=America/Sao_Paulo
     restart: unless-stopped
     networks:
-    - traefik
+      - traefik
+    deploy:
+      resources:
+        limits:
+          memory: 6m    
 
 networks:
-traefik:
-  external: true            
+  traefik:
+    external: true        
