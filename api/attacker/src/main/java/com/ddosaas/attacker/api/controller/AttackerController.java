@@ -22,7 +22,7 @@ public class AttackerController {
 
 		try {
 			this.attackerService.run(runDTO);
-			return ResponseEntity.ok("Ataque Concluído!");
+			return ResponseEntity.ok("Attack Completed!");
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

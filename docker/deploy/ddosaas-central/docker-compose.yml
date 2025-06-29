@@ -31,7 +31,7 @@ services:
     - "traefik.http.routers.central.entrypoints=websecure"
     - "traefik.http.routers.central.tls=true"
     - "traefik.http.routers.central.tls.certresolver=le"
-    - "traefik.http.routers.central.rule=Host(`cti-central.ppee-unb.com.br`)"
+    - "traefik.http.routers.central.rule=Host(`${DOMAIN_CENTRAL}`)"
     - "traefik.http.services.central.loadbalancer.server.port=8080"
     - "traefik.http.routers.central.service=central"
     networks:
@@ -88,7 +88,7 @@ services:
       - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.tls.certresolver=le"
-      - "traefik.http.routers.portainer.rule=Host(`portainer-central.ppee-unb.com.br`)"
+      - "traefik.http.routers.portainer.rule=Host(`${DOMAIN_PORTAINER_CENTRAL}`)"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
       - "traefik.http.routers.portainer.service=portainer"
     networks:

@@ -13,3 +13,44 @@ services:
       resources:
         limits:
           memory: 6m
+    labels:
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.tls.certresolver=le"
+      - "traefik.http.routers.web.rule=Host(`${DOMAIN_WEB}`)"
+      - "traefik.http.services.web.loadbalancer.server.port=80"
+      - "traefik.http.routers.web.service=web"
+    networks:
+      - traefik          
+
+  traefik:
+    image: traefik:v2.9.5
+    container_name: traefik
+    hostname: traefik
+    command:
+    # - --log.level=DEBUG
+    - --entrypoints.web.address=:80
+    - --entrypoints.websecure.address=:443
+    - --entrypoints.web.http.redirections.entryPoint.to=websecure
+    - --entrypoints.web.http.redirections.entryPoint.scheme=https
+    - --entrypoints.web.http.redirections.entrypoint.permanent=true
+    - --certificatesresolvers.le.acme.email=ddosaas.ppee.unb@gmail.com
+    - --certificatesresolvers.le.acme.storage=acme.json
+    - --certificatesresolvers.le.acme.tlschallenge=true
+    - --providers.docker=true
+    - --providers.docker.exposedByDefault=false
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "/data/letsencrypt/acme.json:/acme.json"
+    environment:
+    - TZ=America/Sao_Paulo
+    restart: unless-stopped
+    networks:
+    - traefik
+
+networks:
+traefik:
+  external: true            
