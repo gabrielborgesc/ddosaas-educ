@@ -27,7 +27,7 @@ public class WorkerService {
         RunCentralDTO runWorker = runCentralDTO.clone();
         runWorker.setInternalToken(internalToken);
 
-        log.info("Iniciando ataque em {} utilizando o worker {} com token {}", runWorker.getUrl(), worker.getUrl(), runWorker.getInternalToken());
+        log.info("Iniciando ataque em {} utilizando o worker {} ", runWorker.getUrl(), worker.getUrl());
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(runWorker, headers);
