@@ -18,7 +18,8 @@
 
 ## 📸 Web Interface
 
-![Web UI Screenshot](./aeeebdc7-f8b9-46b6-864d-83e089297b82.png)
+![image](https://github.com/user-attachments/assets/9330e3cc-0f20-45f0-91a1-aa0d6fdb22fd)
+
 
 ---
 
