@@ -1,13 +1,51 @@
-## Central
-```
-cd api/central
-./mvnw clean install
-./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-```
+# DDoSaaS Simulation 🧪💥
 
-## Attacker
-```
-cd api/attacker
-./mvnw clean install
-./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006"
-```
+**DDoSaaS** (Distributed Denial-of-Service as a Service) is a controlled simulation platform designed for stress-testing, research, and educational purposes. It provides an API and a web-based panel to configure and launch synthetic DDoS-style traffic against specified URLs under safe, authorized conditions.
+
+> ⚠️ This tool is intended **only for legal, educational, and testing purposes** within isolated or authorized environments. **Do not use** against public or third-party services without explicit permission.
+
+---
+
+## 🚀 Features
+
+- 🔌 **RESTful API** to launch simulated DDoS attacks
+- 🌐 **Web UI** for manual configuration
+- ⚙️ Configurable number of threads and source IPs
+- 🔐 Token-based access control
+- 🐳 Dockerized for easy deployment
+
+---
+
+## 📸 Web Interface
+
+![image](https://github.com/user-attachments/assets/9330e3cc-0f20-45f0-91a1-aa0d6fdb22fd)
+
+
+---
+
+## 🛠️ How It Works
+
+1. A client sends a request to the API with:
+   - Target URL
+   - Access token
+   - Number of threads
+   - Number of simulated IPs
+
+2. The system dispatches worker threads to generate concurrent requests toward the target.
+
+3. All operations are logged for monitoring and analysis.
+
+---
+
+## 📦 Installation
+
+### Requirements
+
+- Docker
+- Docker Compose
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/your-username/ddosaas.git
+cd ddosaas
