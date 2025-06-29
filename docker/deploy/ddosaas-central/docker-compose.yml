@@ -43,7 +43,7 @@ services:
     # ports:
     #   - "8080:8080"
     environment:
-      internalToken: token_to_be_replaced
+      internalToken: ${INTERNAL_TOKEN}
     restart: unless-stopped
     networks:
     - traefik
